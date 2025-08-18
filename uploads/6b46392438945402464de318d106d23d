@@ -1,0 +1,2 @@
+nominal_bore,pressure_class_label,pressure_class_psi,bolt_count,size_of_bolts,wrench_no,truck_unit_psi,ring_needed,flange_size_raw,annular_pressure,single_ram_pressure,double_rams_pressure,mud_cross_pressure
+16,15M,15000,10,1-1/2,3,15000,BX-160,16 15M,15000,15000,15000,15000

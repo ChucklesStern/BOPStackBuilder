@@ -64,7 +64,7 @@ function generateReportLines(stackData: StackData): string[] {
   }
 
   // Generate lines for adapter spools
-  for (const [groupId, spoolSides] of spoolGroups.entries()) {
+  for (const [groupId, spoolSides] of Array.from(spoolGroups.entries())) {
     spoolSides.sort((a: any, b: any) => (a.createdAt?.getTime() || 0) - (b.createdAt?.getTime() || 0)); // Sort by creation time
     
     spoolSides.forEach((side: any, index: number) => {
@@ -271,7 +271,15 @@ export async function generatePDF(stackData: StackData, outputPath: string): Pro
   
   const browser = await puppeteer.launch({
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--disable-web-security',
+      '--disable-features=VizDisplayCompositor',
+      '--single-process'
+    ],
   });
   
   try {

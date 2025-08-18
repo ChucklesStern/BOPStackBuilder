@@ -79,10 +79,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getFlangeSpecs(filters?: FlangeFilterOptions): Promise<FlangeSpec[]> {
-    let query = db.select().from(flangeSpecs);
-    
     if (!filters) {
-      return await query;
+      return await db.select().from(flangeSpecs);
     }
 
     const conditions = [];
@@ -118,10 +116,17 @@ export class DatabaseStorage implements IStorage {
     }
 
     if (conditions.length > 0) {
-      query = query.where(and(...conditions));
+      return await db
+        .select()
+        .from(flangeSpecs)
+        .where(and(...conditions))
+        .orderBy(asc(flangeSpecs.flangeSizeRaw));
     }
 
-    return await query.orderBy(asc(flangeSpecs.flangeSizeRaw));
+    return await db
+      .select()
+      .from(flangeSpecs)
+      .orderBy(asc(flangeSpecs.flangeSizeRaw));
   }
 
   async getFlangeSpecById(id: string): Promise<FlangeSpec | undefined> {

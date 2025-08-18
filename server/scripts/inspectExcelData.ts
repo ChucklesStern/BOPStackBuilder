@@ -25,7 +25,7 @@ const jsonData = XLSX.utils.sheet_to_json(flangeSheet);
 console.log('First 3 records:');
 jsonData.slice(0, 3).forEach((record, i) => {
   console.log(`\nRecord ${i + 1}:`);
-  Object.entries(record).forEach(([key, value]) => {
+  Object.entries(record as Record<string, unknown>).forEach(([key, value]) => {
     console.log(`  ${key}: ${value}`);
   });
 });

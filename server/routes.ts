@@ -29,7 +29,20 @@ const upload = multer({
 export async function registerRoutes(app: Express): Promise<Server> {
   
   // Upload and parse CSV/XLSX
-  app.post("/api/ingest", upload.single('file'), async (req, res) => {
+  app.post("/api/ingest", (req, res, next) => {
+    upload.single('file')(req, res, (err) => {
+      if (err) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({ error: 'File too large. Maximum size is 10MB.' });
+        }
+        if (err.message.includes('Invalid file type')) {
+          return res.status(400).json({ error: err.message });
+        }
+        return res.status(500).json({ error: 'File upload failed' });
+      }
+      next();
+    });
+  }, async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ error: "No file uploaded" });
