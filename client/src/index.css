@@ -1,0 +1,317 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(210 25% 7.8431%);
+  --card: hsl(180 6.6667% 97.0588%);
+  --card-foreground: hsl(210 25% 7.8431%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(210 25% 7.8431%);
+  --primary: hsl(213 88% 53%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(210 25% 7.8431%);
+  --secondary-foreground: hsl(0 0% 100%);
+  --muted: hsl(240 1.9608% 90%);
+  --muted-foreground: hsl(210 25% 7.8431%);
+  --accent: hsl(211.5789 51.3514% 92.7451%);
+  --accent-foreground: hsl(213 88% 53%);
+  --destructive: hsl(356.3033 90.5579% 54.3137%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(201.4286 30.4348% 90.9804%);
+  --input: hsl(200 23.0769% 97.4510%);
+  --ring: hsl(213 89% 53%);
+  --chart-1: hsl(213 88% 53%);
+  --chart-2: hsl(159.7826 100% 36.0784%);
+  --chart-3: hsl(42.0290 92.8251% 56.2745%);
+  --chart-4: hsl(147.1429 78.5047% 41.9608%);
+  --chart-5: hsl(341.4894 75.2000% 50.9804%);
+  --sidebar: hsl(180 6.6667% 97.0588%);
+  --sidebar-foreground: hsl(210 25% 7.8431%);
+  --sidebar-primary: hsl(213 88% 53%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(211.5789 51.3514% 92.7451%);
+  --sidebar-accent-foreground: hsl(213 88% 53%);
+  --sidebar-border: hsl(205.0000 25.0000% 90.5882%);
+  --sidebar-ring: hsl(213 89% 53%);
+  
+  /* Industrial color palette */
+  --industrial-50: hsl(206 100% 95%);
+  --industrial-100: hsl(206 100% 89%);
+  --industrial-200: hsl(206 100% 82%);
+  --industrial-300: hsl(206 96% 75%);
+  --industrial-400: hsl(206 93% 69%);
+  --industrial-500: hsl(213 88% 53%);
+  --industrial-600: hsl(213 89% 53%);
+  --industrial-700: hsl(213 82% 51%);
+  --industrial-800: hsl(213 88% 37%);
+  --industrial-900: hsl(219 100% 21%);
+  
+  /* Accent colors */
+  --accent-500: hsl(38 100% 50%);
+  --accent-600: hsl(33 100% 45%);
+  --accent-700: hsl(14 100% 37%);
+  
+  /* Neutral colors */
+  --neutral-50: hsl(0 0% 98%);
+  --neutral-100: hsl(0 0% 96%);
+  --neutral-200: hsl(0 0% 93%);
+  --neutral-300: hsl(0 0% 88%);
+  --neutral-400: hsl(0 0% 74%);
+  --neutral-500: hsl(0 0% 62%);
+  --neutral-600: hsl(0 0% 46%);
+  --neutral-700: hsl(0 0% 38%);
+  --neutral-800: hsl(0 0% 26%);
+  --neutral-900: hsl(0 0% 13%);
+
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+  --radius: 0.5rem;
+  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0px 1px 2px 0px hsl(0 0% 0% / 0.05), 0px 1px 3px 0px hsl(0 0% 0% / 0.1);
+  --shadow: 0px 1px 3px 0px hsl(0 0% 0% / 0.1), 0px 1px 2px 0px hsl(0 0% 0% / 0.06);
+  --shadow-md: 0px 4px 6px -1px hsl(0 0% 0% / 0.1), 0px 2px 4px -1px hsl(0 0% 0% / 0.06);
+  --shadow-lg: 0px 10px 15px -3px hsl(0 0% 0% / 0.1), 0px 4px 6px -2px hsl(0 0% 0% / 0.05);
+  --shadow-xl: 0px 20px 25px -5px hsl(0 0% 0% / 0.1), 0px 10px 10px -5px hsl(0 0% 0% / 0.04);
+  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.25);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+}
+
+.dark {
+  --background: hsl(0 0% 0%);
+  --foreground: hsl(200 6.6667% 91.1765%);
+  --card: hsl(228 9.8039% 10%);
+  --card-foreground: hsl(0 0% 85.0980%);
+  --popover: hsl(0 0% 0%);
+  --popover-foreground: hsl(200 6.6667% 91.1765%);
+  --primary: hsl(213 87% 52%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(195.0000 15.3846% 94.9020%);
+  --secondary-foreground: hsl(210 25% 7.8431%);
+  --muted: hsl(0 0% 9.4118%);
+  --muted-foreground: hsl(210 3.3898% 46.2745%);
+  --accent: hsl(205.7143 70% 7.8431%);
+  --accent-foreground: hsl(213 87% 52%);
+  --destructive: hsl(356.3033 90.5579% 54.3137%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(210 5.2632% 14.9020%);
+  --input: hsl(207.6923 27.6596% 18.4314%);
+  --ring: hsl(213 89% 53%);
+  --chart-1: hsl(213 88% 53%);
+  --chart-2: hsl(159.7826 100% 36.0784%);
+  --chart-3: hsl(42.0290 92.8251% 56.2745%);
+  --chart-4: hsl(147.1429 78.5047% 41.9608%);
+  --chart-5: hsl(341.4894 75.2000% 50.9804%);
+  --sidebar: hsl(228 9.8039% 10%);
+  --sidebar-foreground: hsl(0 0% 85.0980%);
+  --sidebar-primary: hsl(213 89% 53%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(205.7143 70% 7.8431%);
+  --sidebar-accent-foreground: hsl(213 87% 52%);
+  --sidebar-border: hsl(205.7143 15.7895% 26.0784%);
+  --sidebar-ring: hsl(213 89% 53%);
+  
+  /* Dark mode industrial colors */
+  --industrial-50: hsl(219 100% 5%);
+  --industrial-100: hsl(219 100% 8%);
+  --industrial-200: hsl(219 100% 12%);
+  --industrial-300: hsl(213 82% 20%);
+  --industrial-400: hsl(213 82% 30%);
+  --industrial-500: hsl(213 87% 52%);
+  --industrial-600: hsl(213 89% 53%);
+  --industrial-700: hsl(206 93% 69%);
+  --industrial-800: hsl(206 96% 75%);
+  --industrial-900: hsl(206 100% 82%);
+  
+  /* Dark mode accent colors */
+  --accent-500: hsl(38 100% 50%);
+  --accent-600: hsl(33 100% 45%);
+  --accent-700: hsl(14 100% 37%);
+  
+  /* Dark mode neutral colors */
+  --neutral-50: hsl(0 0% 3%);
+  --neutral-100: hsl(0 0% 6%);
+  --neutral-200: hsl(0 0% 9%);
+  --neutral-300: hsl(0 0% 15%);
+  --neutral-400: hsl(0 0% 26%);
+  --neutral-500: hsl(0 0% 38%);
+  --neutral-600: hsl(0 0% 46%);
+  --neutral-700: hsl(0 0% 62%);
+  --neutral-800: hsl(0 0% 74%);
+  --neutral-900: hsl(0 0% 88%);
+
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+  --radius: 0.5rem;
+  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.3);
+  --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.3);
+  --shadow-sm: 0px 1px 2px 0px hsl(0 0% 0% / 0.3), 0px 1px 3px 0px hsl(0 0% 0% / 0.4);
+  --shadow: 0px 1px 3px 0px hsl(0 0% 0% / 0.4), 0px 1px 2px 0px hsl(0 0% 0% / 0.3);
+  --shadow-md: 0px 4px 6px -1px hsl(0 0% 0% / 0.4), 0px 2px 4px -1px hsl(0 0% 0% / 0.3);
+  --shadow-lg: 0px 10px 15px -3px hsl(0 0% 0% / 0.4), 0px 4px 6px -2px hsl(0 0% 0% / 0.3);
+  --shadow-xl: 0px 20px 25px -5px hsl(0 0% 0% / 0.4), 0px 10px 10px -5px hsl(0 0% 0% / 0.25);
+  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.5);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+
+  /* Industrial color utilities */
+  .bg-industrial-50 { background-color: var(--industrial-50); }
+  .bg-industrial-100 { background-color: var(--industrial-100); }
+  .bg-industrial-200 { background-color: var(--industrial-200); }
+  .bg-industrial-300 { background-color: var(--industrial-300); }
+  .bg-industrial-400 { background-color: var(--industrial-400); }
+  .bg-industrial-500 { background-color: var(--industrial-500); }
+  .bg-industrial-600 { background-color: var(--industrial-600); }
+  .bg-industrial-700 { background-color: var(--industrial-700); }
+  .bg-industrial-800 { background-color: var(--industrial-800); }
+  .bg-industrial-900 { background-color: var(--industrial-900); }
+
+  .text-industrial-50 { color: var(--industrial-50); }
+  .text-industrial-100 { color: var(--industrial-100); }
+  .text-industrial-200 { color: var(--industrial-200); }
+  .text-industrial-300 { color: var(--industrial-300); }
+  .text-industrial-400 { color: var(--industrial-400); }
+  .text-industrial-500 { color: var(--industrial-500); }
+  .text-industrial-600 { color: var(--industrial-600); }
+  .text-industrial-700 { color: var(--industrial-700); }
+  .text-industrial-800 { color: var(--industrial-800); }
+  .text-industrial-900 { color: var(--industrial-900); }
+
+  .border-industrial-50 { border-color: var(--industrial-50); }
+  .border-industrial-100 { border-color: var(--industrial-100); }
+  .border-industrial-200 { border-color: var(--industrial-200); }
+  .border-industrial-300 { border-color: var(--industrial-300); }
+  .border-industrial-400 { border-color: var(--industrial-400); }
+  .border-industrial-500 { border-color: var(--industrial-500); }
+  .border-industrial-600 { border-color: var(--industrial-600); }
+  .border-industrial-700 { border-color: var(--industrial-700); }
+  .border-industrial-800 { border-color: var(--industrial-800); }
+  .border-industrial-900 { border-color: var(--industrial-900); }
+
+  /* Accent color utilities */
+  .bg-accent-500 { background-color: var(--accent-500); }
+  .bg-accent-600 { background-color: var(--accent-600); }
+  .bg-accent-700 { background-color: var(--accent-700); }
+
+  .text-accent-500 { color: var(--accent-500); }
+  .text-accent-600 { color: var(--accent-600); }
+  .text-accent-700 { color: var(--accent-700); }
+
+  .border-accent-500 { border-color: var(--accent-500); }
+  .border-accent-600 { border-color: var(--accent-600); }
+  .border-accent-700 { border-color: var(--accent-700); }
+
+  /* Neutral color utilities */
+  .bg-neutral-50 { background-color: var(--neutral-50); }
+  .bg-neutral-100 { background-color: var(--neutral-100); }
+  .bg-neutral-200 { background-color: var(--neutral-200); }
+  .bg-neutral-300 { background-color: var(--neutral-300); }
+  .bg-neutral-400 { background-color: var(--neutral-400); }
+  .bg-neutral-500 { background-color: var(--neutral-500); }
+  .bg-neutral-600 { background-color: var(--neutral-600); }
+  .bg-neutral-700 { background-color: var(--neutral-700); }
+  .bg-neutral-800 { background-color: var(--neutral-800); }
+  .bg-neutral-900 { background-color: var(--neutral-900); }
+
+  .text-neutral-50 { color: var(--neutral-50); }
+  .text-neutral-100 { color: var(--neutral-100); }
+  .text-neutral-200 { color: var(--neutral-200); }
+  .text-neutral-300 { color: var(--neutral-300); }
+  .text-neutral-400 { color: var(--neutral-400); }
+  .text-neutral-500 { color: var(--neutral-500); }
+  .text-neutral-600 { color: var(--neutral-600); }
+  .text-neutral-700 { color: var(--neutral-700); }
+  .text-neutral-800 { color: var(--neutral-800); }
+  .text-neutral-900 { color: var(--neutral-900); }
+
+  .border-neutral-50 { border-color: var(--neutral-50); }
+  .border-neutral-100 { border-color: var(--neutral-100); }
+  .border-neutral-200 { border-color: var(--neutral-200); }
+  .border-neutral-300 { border-color: var(--neutral-300); }
+  .border-neutral-400 { border-color: var(--neutral-400); }
+  .border-neutral-500 { border-color: var(--neutral-500); }
+  .border-neutral-600 { border-color: var(--neutral-600); }
+  .border-neutral-700 { border-color: var(--neutral-700); }
+  .border-neutral-800 { border-color: var(--neutral-800); }
+  .border-neutral-900 { border-color: var(--neutral-900); }
+
+  /* Hover states for industrial colors */
+  .hover\:bg-industrial-50:hover { background-color: var(--industrial-50); }
+  .hover\:bg-industrial-100:hover { background-color: var(--industrial-100); }
+  .hover\:bg-industrial-200:hover { background-color: var(--industrial-200); }
+  .hover\:bg-industrial-300:hover { background-color: var(--industrial-300); }
+  .hover\:bg-industrial-400:hover { background-color: var(--industrial-400); }
+  .hover\:bg-industrial-500:hover { background-color: var(--industrial-500); }
+  .hover\:bg-industrial-600:hover { background-color: var(--industrial-600); }
+  .hover\:bg-industrial-700:hover { background-color: var(--industrial-700); }
+  .hover\:bg-industrial-800:hover { background-color: var(--industrial-800); }
+  .hover\:bg-industrial-900:hover { background-color: var(--industrial-900); }
+
+  .hover\:text-industrial-50:hover { color: var(--industrial-50); }
+  .hover\:text-industrial-100:hover { color: var(--industrial-100); }
+  .hover\:text-industrial-200:hover { color: var(--industrial-200); }
+  .hover\:text-industrial-300:hover { color: var(--industrial-300); }
+  .hover\:text-industrial-400:hover { color: var(--industrial-400); }
+  .hover\:text-industrial-500:hover { color: var(--industrial-500); }
+  .hover\:text-industrial-600:hover { color: var(--industrial-600); }
+  .hover\:text-industrial-700:hover { color: var(--industrial-700); }
+  .hover\:text-industrial-800:hover { color: var(--industrial-800); }
+  .hover\:text-industrial-900:hover { color: var(--industrial-900); }
+
+  .hover\:border-industrial-50:hover { border-color: var(--industrial-50); }
+  .hover\:border-industrial-100:hover { border-color: var(--industrial-100); }
+  .hover\:border-industrial-200:hover { border-color: var(--industrial-200); }
+  .hover\:border-industrial-300:hover { border-color: var(--industrial-300); }
+  .hover\:border-industrial-400:hover { border-color: var(--industrial-400); }
+  .hover\:border-industrial-500:hover { border-color: var(--industrial-500); }
+  .hover\:border-industrial-600:hover { border-color: var(--industrial-600); }
+  .hover\:border-industrial-700:hover { border-color: var(--industrial-700); }
+  .hover\:border-industrial-800:hover { border-color: var(--industrial-800); }
+  .hover\:border-industrial-900:hover { border-color: var(--industrial-900); }
+
+  /* Hover states for accent colors */
+  .hover\:bg-accent-500:hover { background-color: var(--accent-500); }
+  .hover\:bg-accent-600:hover { background-color: var(--accent-600); }
+  .hover\:bg-accent-700:hover { background-color: var(--accent-700); }
+
+  .hover\:text-accent-500:hover { color: var(--accent-500); }
+  .hover\:text-accent-600:hover { color: var(--accent-600); }
+  .hover\:text-accent-700:hover { color: var(--accent-700); }
+
+  /* Hover states for neutral colors */
+  .hover\:bg-neutral-50:hover { background-color: var(--neutral-50); }
+  .hover\:bg-neutral-100:hover { background-color: var(--neutral-100); }
+  .hover\:bg-neutral-200:hover { background-color: var(--neutral-200); }
+  .hover\:bg-neutral-300:hover { background-color: var(--neutral-300); }
+  .hover\:bg-neutral-400:hover { background-color: var(--neutral-400); }
+  .hover\:bg-neutral-500:hover { background-color: var(--neutral-500); }
+  .hover\:bg-neutral-600:hover { background-color: var(--neutral-600); }
+  .hover\:bg-neutral-700:hover { background-color: var(--neutral-700); }
+  .hover\:bg-neutral-800:hover { background-color: var(--neutral-800); }
+  .hover\:bg-neutral-900:hover { background-color: var(--neutral-900); }
+
+  .hover\:text-neutral-50:hover { color: var(--neutral-50); }
+  .hover\:text-neutral-100:hover { color: var(--neutral-100); }
+  .hover\:text-neutral-200:hover { color: var(--neutral-200); }
+  .hover\:text-neutral-300:hover { color: var(--neutral-300); }
+  .hover\:text-neutral-400:hover { color: var(--neutral-400); }
+  .hover\:text-neutral-500:hover { color: var(--neutral-500); }
+  .hover\:text-neutral-600:hover { color: var(--neutral-600); }
+  .hover\:text-neutral-700:hover { color: var(--neutral-700); }
+  .hover\:text-neutral-800:hover { color: var(--neutral-800); }
+  .hover\:text-neutral-900:hover { color: var(--neutral-900); }
+}
