@@ -14,7 +14,8 @@
       "Bash(npx tsc:*)",
       "Bash(node:*)",
       "Bash(npx tsx:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
