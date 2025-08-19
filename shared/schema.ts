@@ -107,7 +107,9 @@ export const insertStackHeaderSchema = createInsertSchema(stackHeaders).omit({
   createdAt: true,
 });
 
-export const insertPartSelectionSchema = createInsertSchema(partSelections).omit({
+export const insertPartSelectionSchema = createInsertSchema(partSelections, {
+  spoolGroupId: z.string().optional().nullable(), // Allow string instead of strict UUID validation
+}).omit({
   id: true,
   createdAt: true,
 });

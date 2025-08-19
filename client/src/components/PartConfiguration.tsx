@@ -69,6 +69,17 @@ export default function PartConfiguration({ partType, onComplete, onCancel }: Pa
     queryKey: ["/api/options/flanges", flangeFilters],
   });
 
+  // Auto-select flange spec when we have exactly one option
+  useEffect(() => {
+    const specs = flangeOptions as FlangeSpec[];
+    if (specs.length === 1 && !config.selectedFlangeSpec) {
+      setConfig(prev => ({ ...prev, selectedFlangeSpec: specs[0] }));
+    } else if (specs.length !== 1 && config.selectedFlangeSpec) {
+      // Clear selection if we don't have exactly one match
+      setConfig(prev => ({ ...prev, selectedFlangeSpec: undefined }));
+    }
+  }, [flangeOptions, config.selectedFlangeSpec]);
+
   // Get unique values for dropdowns
   const uniqueFlangeSizes = Array.from(new Set((flangeOptions as FlangeSpec[]).map((f: any) => f.flangeSizeRaw)));
   const uniqueBoltCounts = Array.from(new Set((flangeOptions as FlangeSpec[]).map((f: any) => f.boltCount)));
@@ -80,22 +91,12 @@ export default function PartConfiguration({ partType, onComplete, onCancel }: Pa
   };
 
   const handleFlangeSelectionChange = (field: string, value: string) => {
-    setConfig(prev => ({ ...prev, [field]: value }));
-    
-    // Check if we have a unique match
-    const filtered = (flangeOptions as FlangeSpec[]).filter((f: any) => {
-      const newConfig = { ...config, [field]: value };
-      return (
-        (!newConfig.pressure || (isPressureDriven && matchesPressure(f, partType, newConfig.pressure))) &&
-        (!newConfig.flangeSize || f.flangeSizeRaw === newConfig.flangeSize) &&
-        (!newConfig.boltCount || f.boltCount === newConfig.boltCount) &&
-        (!newConfig.boltSize || f.sizeOfBolts === newConfig.boltSize)
-      );
-    });
-
-    if (filtered.length === 1) {
-      setConfig(prev => ({ ...prev, selectedFlangeSpec: filtered[0] }));
-    }
+    setConfig(prev => ({ 
+      ...prev, 
+      [field]: value,
+      // Clear selectedFlangeSpec when making new selections
+      selectedFlangeSpec: undefined
+    }));
   };
 
   const matchesPressure = (flange: FlangeSpec, partType: string, pressure: number): boolean => {

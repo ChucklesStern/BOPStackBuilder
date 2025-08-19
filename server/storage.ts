@@ -52,7 +52,7 @@ export interface IStorage {
   updateStackOrder(stackId: string, orderedPartIds: string[]): Promise<void>;
   
   // Reports
-  createReport(report: InsertReportExport): Promise<ReportExport>;
+  createReport(report: InsertReportExport, id?: string): Promise<ReportExport>;
   getReport(id: string): Promise<ReportExport | undefined>;
 }
 
@@ -85,24 +85,57 @@ export class DatabaseStorage implements IStorage {
 
     const conditions = [];
     
-    if (filters.partType && filters.pressure) {
-      // Filter by pressure for pressure-driven parts
+    // Handle part type filtering with pressure requirements
+    if (filters.partType) {
       switch (filters.partType) {
         case PartType.ANNULAR:
-          conditions.push(eq(flangeSpecs.annularPressure, filters.pressure));
+          // For pressure-driven parts, filter by pressure if provided
+          if (filters.pressure !== undefined) {
+            conditions.push(eq(flangeSpecs.annularPressure, filters.pressure));
+          } else {
+            // Show all flanges that have annular pressure data
+            conditions.push(isNotNull(flangeSpecs.annularPressure));
+          }
           break;
+          
         case PartType.SINGLE_RAM:
-          conditions.push(eq(flangeSpecs.singleRamPressure, filters.pressure));
+          if (filters.pressure !== undefined) {
+            conditions.push(eq(flangeSpecs.singleRamPressure, filters.pressure));
+          } else {
+            conditions.push(isNotNull(flangeSpecs.singleRamPressure));
+          }
           break;
+          
         case PartType.DOUBLE_RAMS:
-          conditions.push(eq(flangeSpecs.doubleRamsPressure, filters.pressure));
+          if (filters.pressure !== undefined) {
+            conditions.push(eq(flangeSpecs.doubleRamsPressure, filters.pressure));
+          } else {
+            conditions.push(isNotNull(flangeSpecs.doubleRamsPressure));
+          }
           break;
+          
         case PartType.MUD_CROSS:
-          conditions.push(eq(flangeSpecs.mudCrossPressure, filters.pressure));
+          if (filters.pressure !== undefined) {
+            conditions.push(eq(flangeSpecs.mudCrossPressure, filters.pressure));
+          } else {
+            conditions.push(isNotNull(flangeSpecs.mudCrossPressure));
+          }
           break;
+          
+        // Geometry-driven parts - no pressure filtering needed
+        case PartType.ANACONDA_LINES:
+        case PartType.ROTATING_HEAD:
+        case PartType.ADAPTER_SPOOL_SIDE:
+          // These parts don't filter by pressure - all flanges are valid
+          break;
+          
+        default:
+          // Unknown part type - return empty results
+          return [];
       }
     }
     
+    // Apply additional filters for progressive narrowing
     if (filters.flangeSize) {
       conditions.push(eq(flangeSpecs.flangeSizeRaw, filters.flangeSize));
     }
@@ -115,6 +148,7 @@ export class DatabaseStorage implements IStorage {
       conditions.push(eq(flangeSpecs.sizeOfBolts, filters.boltSize));
     }
 
+    // Execute query with conditions
     if (conditions.length > 0) {
       return await db
         .select()
@@ -123,6 +157,7 @@ export class DatabaseStorage implements IStorage {
         .orderBy(asc(flangeSpecs.flangeSizeRaw));
     }
 
+    // No conditions means return all flanges
     return await db
       .select()
       .from(flangeSpecs)
@@ -285,10 +320,11 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async createReport(report: InsertReportExport): Promise<ReportExport> {
+  async createReport(report: InsertReportExport, id?: string): Promise<ReportExport> {
+    const values = id ? { ...report, id } : report;
     const [created] = await db
       .insert(reportExports)
-      .values(report)
+      .values(values)
       .returning();
     return created;
   }

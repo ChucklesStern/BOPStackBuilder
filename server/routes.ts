@@ -248,13 +248,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const fullPdfPath = path.join(reportsDir, `${reportId}.pdf`);
-      await generatePDF(stackData, fullPdfPath);
+      console.log(`Generating PDF at: ${fullPdfPath}`);
+      
+      try {
+        await generatePDF(stackData, fullPdfPath);
+        console.log(`PDF generated successfully: ${fs.existsSync(fullPdfPath)}`);
+      } catch (pdfError) {
+        console.error('PDF generation failed:', pdfError);
+        throw pdfError;
+      }
 
       const report = await storage.createReport({
         stackId,
         pdfPath,
         renderedHtml: null, // Could store HTML if needed
-      });
+      }, reportId);
 
       res.json(report);
     } catch (error) {
