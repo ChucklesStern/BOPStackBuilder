@@ -23,7 +23,8 @@ export default function Home() {
     removePartFromStack,
     reorderStack,
     clearStack,
-    generateReport 
+    generateReport,
+    isAddingPart
   } = useStack();
 
   const handleAddPart = () => {
@@ -41,9 +42,14 @@ export default function Home() {
 
   const handlePartConfigured = async (partData: any) => {
     if (currentStack) {
-      await addPartToStack(partData);
-      setShowConfigModal(false);
-      setSelectedPartType(null);
+      try {
+        await addPartToStack(partData);
+        setShowConfigModal(false);
+        setSelectedPartType(null);
+      } catch (error) {
+        // Error is already handled in useStack hook
+        console.error('Failed to add part:', error);
+      }
     }
   };
 
@@ -118,6 +124,7 @@ export default function Home() {
                     setShowConfigModal(false);
                     setSelectedPartType(null);
                   }}
+                  isAddingPart={isAddingPart}
                 />
               )}
 

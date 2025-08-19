@@ -18,6 +18,7 @@ interface PartConfigurationProps {
   partType: PartTypeValue;
   onComplete: (partData: any) => void;
   onCancel: () => void;
+  isAddingPart?: boolean;
 }
 
 const PRESSURE_DRIVEN_PARTS = ["ANNULAR", "SINGLE_RAM", "DOUBLE_RAMS", "MUD_CROSS"];
@@ -42,7 +43,7 @@ interface ConfigState {
   currentSide?: 1 | 2;
 }
 
-export default function PartConfiguration({ partType, onComplete, onCancel }: PartConfigurationProps) {
+export default function PartConfiguration({ partType, onComplete, onCancel, isAddingPart = false }: PartConfigurationProps) {
   const [config, setConfig] = useState<ConfigState>({});
   const [step, setStep] = useState(1);
   const { toast } = useToast();
@@ -373,10 +374,17 @@ export default function PartConfiguration({ partType, onComplete, onCancel }: Pa
         )}
         <Button 
           onClick={handleComplete}
-          disabled={!canComplete()}
+          disabled={!canComplete() || isAddingPart}
           className="bg-industrial-600 hover:bg-industrial-700"
         >
-          Add to Stack
+          {isAddingPart ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              Adding...
+            </>
+          ) : (
+            "Add to Stack"
+          )}
         </Button>
       </div>
     </div>
