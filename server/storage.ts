@@ -54,6 +54,8 @@ export interface IStorage {
   // Reports
   createReport(report: InsertReportExport, id?: string): Promise<ReportExport>;
   getReport(id: string): Promise<ReportExport | undefined>;
+  updateReportPdfPath(id: string, pdfPath: string): Promise<void>;
+  deleteReport(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -140,7 +142,7 @@ export class DatabaseStorage implements IStorage {
       conditions.push(eq(flangeSpecs.flangeSizeRaw, filters.flangeSize));
     }
     
-    if (filters.boltCount) {
+    if (filters.boltCount !== undefined) {
       conditions.push(eq(flangeSpecs.boltCount, filters.boltCount));
     }
     
@@ -335,6 +337,19 @@ export class DatabaseStorage implements IStorage {
       .from(reportExports)
       .where(eq(reportExports.id, id));
     return report;
+  }
+
+  async updateReportPdfPath(id: string, pdfPath: string): Promise<void> {
+    await db
+      .update(reportExports)
+      .set({ pdfPath })
+      .where(eq(reportExports.id, id));
+  }
+
+  async deleteReport(id: string): Promise<void> {
+    await db
+      .delete(reportExports)
+      .where(eq(reportExports.id, id));
   }
 }
 

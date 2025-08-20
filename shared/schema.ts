@@ -109,13 +109,17 @@ export const insertStackHeaderSchema = createInsertSchema(stackHeaders).omit({
 
 export const insertPartSelectionSchema = createInsertSchema(partSelections, {
   spoolGroupId: z.string().optional().nullable(), // Allow string instead of strict UUID validation
+  stackId: z.string().uuid("Invalid UUID format for stackId"),
+  flangeSpecId: z.string().uuid("Invalid UUID format for flangeSpecId"),
 }).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertReportExportSchema = createInsertSchema(reportExports).omit({
-  id: true,
+export const insertReportExportSchema = createInsertSchema(reportExports, {
+  id: z.string().uuid("Invalid UUID format for report ID"),
+  stackId: z.string().uuid("Invalid UUID format for stackId"),
+}).omit({
   createdAt: true,
 });
 

@@ -41,15 +41,22 @@ export default function Home() {
   };
 
   const handlePartConfigured = async (partData: any) => {
+    console.log('DEBUG: handlePartConfigured called with:', partData);
+    console.log('DEBUG: currentStack exists:', !!currentStack);
+    
     if (currentStack) {
       try {
+        console.log('DEBUG: Calling addPartToStack...');
         await addPartToStack(partData);
+        console.log('DEBUG: addPartToStack successful');
         setShowConfigModal(false);
         setSelectedPartType(null);
       } catch (error) {
+        console.error('DEBUG: Failed to add part:', error);
         // Error is already handled in useStack hook
-        console.error('Failed to add part:', error);
       }
+    } else {
+      console.log('DEBUG: No current stack available');
     }
   };
 

@@ -140,7 +140,14 @@ export default function PartConfiguration({ partType, onComplete, onCancel, isAd
   };
 
   const handleComplete = () => {
+    console.log('DEBUG: handleComplete called');
+    console.log('DEBUG: canComplete():', canComplete());
+    console.log('DEBUG: config:', config);
+    console.log('DEBUG: isAddingPart:', isAddingPart);
+    console.log('DEBUG: onComplete function:', onComplete);
+    
     if (!canComplete()) {
+      console.log('DEBUG: Configuration not complete, showing toast');
       toast({
         title: "Configuration Incomplete",
         description: "Please complete all required selections.",
@@ -151,7 +158,7 @@ export default function PartConfiguration({ partType, onComplete, onCancel, isAd
 
     if (isAdapterSpool && config.side1Spec && config.side2Spec) {
       const spoolGroupId = Date.now().toString(); // Use timestamp as temporary ID
-      onComplete({
+      const partData = {
         partType: "ADAPTER_SPOOL_SIDE",
         spoolGroupId,
         sides: [
@@ -164,13 +171,17 @@ export default function PartConfiguration({ partType, onComplete, onCancel, isAd
             pressureValue: null,
           }
         ]
-      });
+      };
+      console.log('DEBUG: Calling onComplete with adapter spool data:', partData);
+      onComplete(partData);
     } else if (config.selectedFlangeSpec) {
-      onComplete({
+      const partData = {
         partType,
         flangeSpecId: config.selectedFlangeSpec.id,
         pressureValue: config.pressure || null,
-      });
+      };
+      console.log('DEBUG: Calling onComplete with regular part data:', partData);
+      onComplete(partData);
     }
   };
 

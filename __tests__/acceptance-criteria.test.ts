@@ -247,6 +247,7 @@ describe('Acceptance Criteria (PRD Section 11)', () => {
             flangeSpecId: flangeSpec.id
           });
         
+        
         const part2Response = await request(app)
           .post(`/api/stack/${stackId}/items`)
           .send({

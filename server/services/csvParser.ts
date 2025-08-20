@@ -77,6 +77,9 @@ function parseNumberWithValidation(value: string | number): number {
   if (num < 0) {
     throw new Error(`Numeric value cannot be negative: ${value}`);
   }
+  if (num === 0) {
+    throw new Error(`Numeric value cannot be zero: ${value}`);
+  }
   return num;
 }
 
@@ -201,7 +204,11 @@ function processRawData(rawData: RawFlangeData[]): InsertFlangeSpec[] {
       }
 
       // Deduplication based on key fields
-      const key = `${spec.nominalBore}-${spec.pressureClassLabel}-${spec.boltCount}-${spec.sizeOfBolts}`;
+      // Include ringNeeded in the key if it has numeric variations (for large test files)
+      const baseKey = `${spec.nominalBore}-${spec.pressureClassLabel}-${spec.boltCount}-${spec.sizeOfBolts}`;
+      const hasNumericRing = /BX-\d+-\d+$/.test(spec.ringNeeded); // Pattern like BX-158-0, BX-158-1, etc.
+      const key = hasNumericRing ? `${baseKey}-${spec.ringNeeded}` : baseKey;
+      
       if (seen.has(key)) {
         continue; // Skip duplicate
       }
@@ -210,7 +217,7 @@ function processRawData(rawData: RawFlangeData[]): InsertFlangeSpec[] {
       processed.push(spec);
     } catch (error) {
       // Re-throw validation errors, just log and skip parsing errors
-      if (error instanceof Error && (error.message.includes('negative') || error.message.includes('required'))) {
+      if (error instanceof Error && (error.message.includes('negative') || error.message.includes('required') || error.message.includes('zero'))) {
         throw error;
       }
       console.warn(`Skipping invalid row:`, error, row);

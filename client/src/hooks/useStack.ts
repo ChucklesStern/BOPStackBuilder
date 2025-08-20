@@ -38,12 +38,20 @@ export function useStack() {
 
   const addPartMutation = useMutation({
     mutationFn: async (partData: PartSelectionData) => {
-      if (!currentStackId) throw new Error("No stack selected");
+      console.log('DEBUG: addPartMutation mutationFn called with:', partData);
+      console.log('DEBUG: currentStackId:', currentStackId);
+      
+      if (!currentStackId) {
+        console.log('DEBUG: No stack selected, throwing error');
+        throw new Error("No stack selected");
+      }
       
       // Handle adapter spool with multiple sides
       if (partData.partType === "ADAPTER_SPOOL_SIDE" && partData.sides) {
+        console.log('DEBUG: Handling adapter spool with multiple sides');
         const responses = [];
         for (const side of partData.sides) {
+          console.log('DEBUG: Making API request for side:', side);
           const response = await apiRequest("POST", `/api/stack/${currentStackId}/items`, {
             partType: "ADAPTER_SPOOL_SIDE",
             spoolGroupId: partData.spoolGroupId,
@@ -52,10 +60,14 @@ export function useStack() {
           });
           responses.push(await response.json());
         }
+        console.log('DEBUG: Adapter spool responses:', responses);
         return responses;
       } else {
+        console.log('DEBUG: Making API request for regular part:', `/api/stack/${currentStackId}/items`);
         const response = await apiRequest("POST", `/api/stack/${currentStackId}/items`, partData);
-        return await response.json();
+        const result = await response.json();
+        console.log('DEBUG: API response result:', result);
+        return result;
       }
     },
     onSuccess: () => {

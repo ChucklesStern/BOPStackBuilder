@@ -9,6 +9,7 @@ import multer from "multer";
 import { randomUUID } from "crypto";
 import path from "path";
 import fs from "fs";
+import type { Request, Response, NextFunction } from "express";
 
 const upload = multer({ 
   dest: "uploads/",
@@ -25,6 +26,23 @@ const upload = multer({
     fileSize: 10 * 1024 * 1024, // 10MB
   }
 });
+
+// UUID validation middleware
+const validateUUIDParam = (paramName: string) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const uuidValue = req.params[paramName];
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    
+    if (!uuidValue || !uuidPattern.test(uuidValue)) {
+      return res.status(400).json({ 
+        error: `Invalid UUID format for parameter '${paramName}'`,
+        received: uuidValue 
+      });
+    }
+    
+    next();
+  };
+};
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -168,9 +186,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Add part to stack
-  app.post("/api/stack/:id/items", async (req, res) => {
+  app.post("/api/stack/:id/items", validateUUIDParam('id'), async (req, res) => {
     try {
       const stackId = req.params.id;
+      
+      // Verify stack exists before proceeding
+      const stack = await storage.getStack(stackId);
+      if (!stack) {
+        return res.status(500).json({ error: "Stack not found or has been deleted" });
+      }
+      
       const partData = { ...req.body, stackId };
       
       // Validate part data
@@ -194,7 +219,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update stack order
-  app.patch("/api/stack/:id/order", async (req, res) => {
+  app.patch("/api/stack/:id/order", validateUUIDParam('id'), async (req, res) => {
     try {
       const stackId = req.params.id;
       const { orderedPartIds } = req.body;
@@ -212,7 +237,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get stack with parts
-  app.get("/api/stack/:id", async (req, res) => {
+  app.get("/api/stack/:id", validateUUIDParam('id'), async (req, res) => {
     try {
       const stackId = req.params.id;
       const stackData = await storage.getStackWithParts(stackId);
@@ -229,7 +254,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Generate report
-  app.post("/api/stack/:id/report", async (req, res) => {
+  app.post("/api/stack/:id/report", validateUUIDParam('id'), async (req, res) => {
     try {
       const stackId = req.params.id;
       const stackData = await storage.getStackWithParts(stackId);
@@ -240,6 +265,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const reportId = randomUUID();
       const pdfPath = `reports/${reportId}.pdf`;
+      console.log(`Creating report with ID: ${reportId}`);
       
       // Ensure reports directory exists
       const reportsDir = path.join(process.cwd(), 'reports');
@@ -250,20 +276,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const fullPdfPath = path.join(reportsDir, `${reportId}.pdf`);
       console.log(`Generating PDF at: ${fullPdfPath}`);
       
+      console.log('About to call generatePDF with stackData:', {
+        stackId: stackData.stack.id,
+        partsCount: stackData.parts.length,
+        fullPdfPath
+      });
+
       try {
         await generatePDF(stackData, fullPdfPath);
         console.log(`PDF generated successfully: ${fs.existsSync(fullPdfPath)}`);
       } catch (pdfError) {
         console.error('PDF generation failed:', pdfError);
+        console.error('Error details:', {
+          message: pdfError instanceof Error ? pdfError.message : String(pdfError),
+          stack: pdfError instanceof Error ? pdfError.stack : undefined,
+          name: pdfError instanceof Error ? pdfError.name : undefined
+        });
         throw pdfError;
       }
 
       const report = await storage.createReport({
+        id: reportId,
         stackId,
         pdfPath,
         renderedHtml: null, // Could store HTML if needed
-      }, reportId);
+      });
 
+      console.log(`Report created and returning:`, report);
       res.json(report);
     } catch (error) {
       console.error("Error generating report:", error);
@@ -272,7 +311,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Download PDF report
-  app.get("/api/reports/:reportId/pdf", async (req, res) => {
+  app.get("/api/reports/:reportId/pdf", validateUUIDParam('reportId'), async (req, res) => {
     try {
       const reportId = req.params.reportId;
       const report = await storage.getReport(reportId);
@@ -299,7 +338,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete stack
-  app.delete("/api/stack/:id", async (req, res) => {
+  app.delete("/api/stack/:id", validateUUIDParam('id'), async (req, res) => {
     try {
       const stackId = req.params.id;
       await storage.deleteStack(stackId);
@@ -311,7 +350,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Remove part from stack
-  app.delete("/api/stack/:stackId/items/:partId", async (req, res) => {
+  app.delete("/api/stack/:stackId/items/:partId", validateUUIDParam('stackId'), validateUUIDParam('partId'), async (req, res) => {
     try {
       const partId = req.params.partId;
       await storage.removePartFromStack(partId);
