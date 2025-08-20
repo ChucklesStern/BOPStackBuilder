@@ -27,9 +27,14 @@ export default function Home() {
     isAddingPart
   } = useStack();
 
-  const handleAddPart = () => {
+  const handleAddPart = async () => {
     if (!currentStack) {
-      createNewStack();
+      try {
+        await createNewStack();
+      } catch (error) {
+        console.error('Failed to create stack:', error);
+        return; // Don't show modal if stack creation failed
+      }
     }
     setShowPartTypeModal(true);
   };

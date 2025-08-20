@@ -187,7 +187,7 @@ export function useStack() {
   return {
     currentStack: currentStack as StackWithParts | null,
     isLoading,
-    createNewStack: () => createStackMutation.mutate(),
+    createNewStack: () => createStackMutation.mutateAsync(),
     addPartToStack: (partData: PartSelectionData) => addPartMutation.mutateAsync(partData),
     removePartFromStack: (partId: string) => removePartMutation.mutate(partId),
     reorderStack: (orderedPartIds: string[]) => reorderMutation.mutate(orderedPartIds),
